@@ -13,7 +13,7 @@ require_once('includes/core.php');
 
 header('X-Content-Type-Options: nosniff');
 
-//require_once('createTerm.php');
+
 
 ?>
 
@@ -77,88 +77,63 @@ if ($origin !== null && isOriginAllowed($origin, $allowOrigin)) {
 ?>
 
 
-
-
-
-
 <?php
-
-// define variables and set to empty values
-$bannerIDErr = $emailErr = $genderErr = $websiteErr = "";
-$bannerID  = $email = $gender = $comment = $website = "";
 
 		
 // if WT_insert is clicked then access the Oracle database and authenticate the user and start the session and redirect to start.php
 // else error messages UserFailed Authentication and redirect to index.php
-
 if(isset($_POST['WT_Insert'])){
 
-	 
-
-	 if (empty($_POST["BannerID"])) {
-		$bannerIDErr = "Banner ID is required";
-	 }else {
-		$bannerID = $_POST["BannerID"];
-
-	 
-		$_SESSION['bannerid'] = $bannerID;
-
-		// echo $_SESSION['bannerid'];
-	 
-	 
-	 
-		 // sql querry to get the student details
-			 $sql_StudentDetails = "SELECT * FROM BANINST1.AT_AR_BALANCE_BY_ENTITY WHERE BANINST1.AT_AR_BALANCE_BY_ENTITY.ID = :BANNERID";
-			 // parsing the querry with the connection string
-			 $query_StudentDetails = oci_parse($conn, $sql_StudentDetails);
-			 // bind the parameter BANNERID
-			 OCIBindByName($query_StudentDetails,":BANNERID",$_SESSION['bannerid']);
-			 // execute the query and generating result
-			 $StudentDetails = oci_execute($query_StudentDetails);
-			 // $row_StudentDetails contains an associative array having key value pairs
-			 $row_StudentDetails = oci_fetch_array($query_StudentDetails, OCI_ASSOC);
-	 
-			 oci_execute($query_StudentDetails);
-			 $numrows = oci_fetch_all($query_StudentDetails, $res);
-	 
-			 if($numrows > 0 ){
-	 
-				 $_SESSION['FirstName'] =str_replace("'", "", $row_StudentDetails['FIRST_NAME']);
-				 $_SESSION['LastName'] = str_replace("'", "", $row_StudentDetails['LAST_NAME'] );
-				 $_SESSION['FullName'] = $_SESSION['FirstName']." ".$_SESSION['LastName'];
-	 
-				 header('Location: studentinfo.php');
-			 
-		 } 
-		 
-		 else {
-			 header('Location: index.php?message=UserFailedAuthentication');
-		 }
+	
+	$sql_StudentBannerAuthentication = "BEGIN WSSU.p_wssu_auth_web_user ('BANID',:userid,:password,:return_val); End;";
+	$query_StudentBannerAuthentication = oci_parse($conn, $sql_StudentBannerAuthentication);
+	
+	OCIBindByName($query_StudentBannerAuthentication,":userid",$_POST['BannerID']);
+	OCIBindByName($query_StudentBannerAuthentication,":password",$_POST['Password']);
+	OCIBindByName($query_StudentBannerAuthentication,":return_val",$authorized,120);
+	$StudentBannerAuthentication = oci_execute($query_StudentBannerAuthentication);
 
 
+// Granting access if authorized and setting bannerid session
+	
+	if($authorized != "NO"){
+		$_SESSION['bannerid'] = $_POST['BannerID'];	
 
-	 }
+		//$_SESSION['bannerid'] = '940260808';	
 
-	 //$_SESSION['bannerid'] = $_POST['BannerID'];	
+					
+			
+		// sql querry to get the student details
+		$sql_StudentDetails = "SELECT * FROM BANINST1.AT_AR_BALANCE_BY_ENTITY WHERE BANINST1.AT_AR_BALANCE_BY_ENTITY.ID = :BANNERID";
+		// parsing the querry with the connection string
+		$query_StudentDetails = oci_parse($conn, $sql_StudentDetails);
+		// bind the parameter BANNERID
+		OCIBindByName($query_StudentDetails,":BANNERID",$_SESSION['bannerid']);
+		// execute the query and generating result
+		$StudentDetails = oci_execute($query_StudentDetails);
+		// $row_StudentDetails contains an associative array having key value pairs
+		$row_StudentDetails = oci_fetch_array($query_StudentDetails, OCI_ASSOC);
 
-
-		
+		oci_execute($query_StudentDetails);
+		oci_fetch_all($query_StudentDetails, $res);
 	
 		
+		$_SESSION['FirstName'] =str_replace("'", "", $row_StudentDetails['FIRST_NAME']);
+		$_SESSION['LastName'] = str_replace("'", "", $row_StudentDetails['LAST_NAME'] );
+		$_SESSION['FullName'] = $_SESSION['FirstName']." ".$_SESSION['LastName'];
 		
-        
-        //$numrows = oci_fetch_all($query_StudentDetails, $res);
 
-        //echo $_SESSION['FullName'];
-
-        //echo $numrows;
+		
+		
+		//return;
+		header('Location: studentinfo.php');
+		
+	} else {
+		header('Location: index.php?message=UserFailedAuthentication');
+	}
 }
 
-
 ?>
-
-
-
 
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -173,10 +148,6 @@ if(isset($_POST['WT_Insert'])){
 		<link href="css/themes.css" rel="stylesheet" type="text/css" />
 
 		<link href="css/login.css" rel="stylesheet" type="text/css" />
-
-		<style>
-         .error {color: #FF0000;}
-      </style>
 </head>
 
 <body>
@@ -193,7 +164,7 @@ if(isset($_POST['WT_Insert'])){
 		<h4>General Information</h4>
                
                 <!--<?php echo $_SESSION['myMessage']; ?>-->
-                <p class="lead">Student Passport Info.</p>
+                <p class="lead">One Stop Information.</p>
                <div class="jumbotron">
 			   		<form id="form1" class="form-group" name="form1" method="post" action="index.php" AUTOCOMPLETE="OFF">
 					   <?php echo Csrf::getInputToken('index') ?>
@@ -202,25 +173,35 @@ if(isset($_POST['WT_Insert'])){
                             <div class="col-sm-10">
                                 <input name="BannerID" class="form-control" type="text" id="BannerID" maxlength="9"
                                     placeholder="Please Enter your BannerID" />
-									<span class = "col-sm-10 text-danger font-weight-bold text-justify"><?php echo $bannerIDErr;?></span>
                             </div>
-							
-                  			
-             
-
                         </div>
-                       
+                        <div class="form-group row">
+                            <label for="Password" class="col-sm-2 col-form-label font-weight-bold">PIN #:</label>
+                            <div class="col-sm-10">
+                                <input name="Password" class="form-control" type="password" id="Password" maxlength="6"
+                                    placeholder="Please Enter your PIN #" />
+                            </div>
+                        </div>
 
 						<?php 
 	if (isset($_GET['message']) && strip_tags($_GET['message']) == "UserFailedAuthentication") { ?>
 					   <div class="row">
                             <div class="col-sm-2"></div>
                             <div class="col-sm-10 text-danger font-weight-bold text-justify">
-                                Entered Banner ID is not available ! Please try again.
+                                Your Banner ID and Password combination is wrong! Please try again.
                             </div>
                         </div>
                         <?php } ?>
-										
+
+						<?php if (isset($_GET['message']) && strip_tags($_GET['message'])=="LoggedOut") { ?>
+                        <div class="row">
+                            <div class="col-sm-2"></div>
+                            <div class="col-sm-10 text-danger font-weight-bold text-justify">
+                                You have successfully logged out of the parking voucher application.Please close this
+                                browser window to ensure your data's safety.
+                            </div>
+                        </div>
+                        <?php } ?>
                         <br />
 
 						<div class="col-sm-12">
@@ -236,7 +217,7 @@ if(isset($_POST['WT_Insert'])){
 			   <blockquote class="blockquote mb-0">
                         <h4>Support Information</h4>
                         <footer class="blockquote-footer">
-                            <p>Contact Info. </p>
+                            <p>Contact Student Accounts at 336-750-2812. </p>
                         </footer>
                     <blockquote>	
 		</div> <!-- col-8 end -->
