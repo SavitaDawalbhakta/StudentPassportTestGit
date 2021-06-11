@@ -1,11 +1,11 @@
 <?php
 
 // Connects to the PROD8 (i.e. database)
-$conn = oci_connect('WSSU', '2wsxcft6', '(DESCRIPTION=(TRANSPORT_CONNECT_TIMEOUT=3)(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST=wssuprod-wdc.uncecs.edu)(PORT=15215)(SEND_BUF_SIZE=10485760)(RECV_BUF_SIZE=10485760))(ADDRESS=(PROTOCOL=TCP)(HOST=wssuprod-mcnc.uncecs.edu)(PORT=15215)(SEND_BUF_SIZE=10485760)(RECV_BUF_SIZE=10485760)))(SDU=65535)(CONNECT_DATA=(UR=A)(SERVICE_NAME=WSSUPROD_PRMY.wssu.edu)))');
+//$conn = oci_connect('WSSU', '2wsxcft6', '(DESCRIPTION=(TRANSPORT_CONNECT_TIMEOUT=3)(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST=wssuprod-wdc.uncecs.edu)(PORT=15215)(SEND_BUF_SIZE=10485760)(RECV_BUF_SIZE=10485760))(ADDRESS=(PROTOCOL=TCP)(HOST=wssuprod-mcnc.uncecs.edu)(PORT=15215)(SEND_BUF_SIZE=10485760)(RECV_BUF_SIZE=10485760)))(SDU=65535)(CONNECT_DATA=(UR=A)(SERVICE_NAME=WSSUPROD_PRMY.wssu.edu)))');
 
 
 // Connects to the Test DB (i.e. database)
-//$conn = oci_connect('WSSU', 'wssu1946', '(DESCRIPTION=(TRANSPORT_CONNECT_TIMEOUT=3)(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST=wssutest-mcnc.uncecs.edu)(PORT=15215)(SEND_BUF_SIZE=10485760)(RECV_BUF_SIZE=10485760))(ADDRESS=(PROTOCOL=TCP)(HOST=wssutest-mcnc.uncecs.edu)(PORT=15215)(SEND_BUF_SIZE=10485760)(RECV_BUF_SIZE=10485760)))(SDU=65535)(CONNECT_DATA=(UR=A)(SERVICE_NAME=WSSUTEST_PRMY.wssu.edu)))');
+$conn = oci_connect('WSSU', 'wssu1946', '(DESCRIPTION=(TRANSPORT_CONNECT_TIMEOUT=3)(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST=wssutest-mcnc.uncecs.edu)(PORT=15215)(SEND_BUF_SIZE=10485760)(RECV_BUF_SIZE=10485760))(ADDRESS=(PROTOCOL=TCP)(HOST=wssutest-mcnc.uncecs.edu)(PORT=15215)(SEND_BUF_SIZE=10485760)(RECV_BUF_SIZE=10485760)))(SDU=65535)(CONNECT_DATA=(UR=A)(SERVICE_NAME=WSSUTEST_PRMY.wssu.edu)))');
 
 if (!$conn) {
     $e = oci_error();	
@@ -28,7 +28,7 @@ else
    //$sql_StudentDetails = "SELECT * FROM GENERAL.GOREMAL A fetch first 5 rows only";
    
   // $sql_StudentDetails = "SELECT * FROM BANINST1.AT_AR_BALANCE_BY_ENTITY  where pidm_key between 274000 and 275000 order by 1 fetch first 100 rows only "; //WHERE BANINST1.AT_AR_BALANCE_BY_ENTITY.ID = '940274184' ";
-
+/*
    $sql_StudentDetails = $sql_StudentAvailableBalance = "SELECT WSSU.bzgkccrd.f_get_min_payment('274553', '202120') AS BALANCE FROM DUAL 
    
    union all
@@ -50,7 +50,15 @@ else
    
    ";
    
+*/
 
+ //  $sql_StudentDetails = "select * from UNCGAWSMGR.PASSPORT_STUDENTS fetch first 10 rows only";
+
+  // $sql_StudentDetails = "select * from UNCGAWSMGR.PASSPORT_STUDENTS where ID = '940240400' ";
+
+  // $sql_StudentDetails = "select count(*) from UNCGAWSMGR.PASSPORT_STUDENTS where STUDENT_PROMISSORY_NOTE_SIGNED = 'Y' ";
+
+  $sql_StudentDetails = "select count(*) from UNCGAWSMGR.PASSPORT_STUDENTS";
 
 
     //$sql_StudentDetails = "SELECT * FROM tbraccd fetch first 5 rows only";

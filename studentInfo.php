@@ -59,11 +59,9 @@ require_once('includes/core.php');
                                                     <?php echo sprintf($_SESSION['FullName']); ?>
                                                 </div>
 
-
-
                                                 <div class="col-sm-3">  
 
-                                                        <p class="text-right">Banner ID:</p>
+                                                        <p class="text-right">BannerID:</p>
 
                                                         </div>
 
@@ -72,6 +70,42 @@ require_once('includes/core.php');
                                                         </div>
 
                                     </div> <!-- row 1 ends -->
+
+                                    <div class="row font-weight-bold ">
+
+                                                <div class="col-sm-3">  
+
+                                                    <p class="text-right">Student Type:</p>
+
+                                                </div>
+
+                                                <div class="col-sm-3">
+                                                    <?php echo sprintf($_SESSION['StudentType']); ?>
+                                                </div>
+
+
+
+                                                <div class="col-sm-3">  
+
+                                                        <p class="text-right">Transfer Hrs:</p>
+
+                                                        </div>
+
+                                                        <div class="col-sm-3">
+                                                        <?php echo sprintf($_SESSION['TransferredHrs']); ?>
+                                                        </div>
+
+                                                        <div class="col-sm-3">  
+
+                                                    <p class="text-right">Residency:</p>
+
+                                                </div>
+
+                                                <div class="col-sm-3">
+                                                    <?php echo sprintf($_SESSION['Residency']); ?>
+                                                </div>
+
+                                    </div> <!-- row 2 ends -->
 
                                 
 
@@ -85,28 +119,64 @@ require_once('includes/core.php');
 
                     <div class="col-sm-3">  
 
-                        <p class="text-right">Name:</p>
+                        <p class="text-right">Final High School Transcript:</p>
 
                     </div>
 
                     <div class="col-sm-3">
-                        <?php echo sprintf($_SESSION['FullName']); ?>
+                        <?php echo sprintf($_SESSION['FinalHST']); ?>
                     </div>
 
 
 
                     <div class="col-sm-3">  
 
-                            <p class="text-right">Banner ID:</p>
+                            <p class="text-right">Ramidition Fee Paid:</p>
 
                             </div>
 
                             <div class="col-sm-3">
-                            <?php echo sprintf($_SESSION['bannerid']); ?>
+                            <?php echo sprintf($_SESSION['Ramidition']); ?>
                             </div>
 
-        </div> <!-- row 2 ends -->
+        </div> <!-- row 1 ends -->
 
+        <div class="row font-weight-bold ">
+
+
+        <div class="col-sm-3">  
+
+    <p class="text-right">Housing Exempt:</p>
+
+</div>
+
+<div class="col-sm-3">
+    <?php echo sprintf($_SESSION['HousingExempt']); ?>
+</div>
+
+<div class="col-sm-3">  
+
+    <p class="text-right">Immunization:</p>
+
+</div>
+
+<div class="col-sm-3">
+    <?php echo sprintf($_SESSION['Immunization']); ?>
+</div>
+
+
+
+<div class="col-sm-3">  
+
+        <p class="text-right">Bed Space:</p>
+
+        </div>
+
+        <div class="col-sm-3">
+        <?php echo sprintf($_SESSION['BedSpace']); ?>
+        </div>
+
+</div> <!-- row 2 ends -->
     
 
 </div> <!-- Jumbotron 2 ends -->
@@ -120,31 +190,225 @@ require_once('includes/core.php');
 
                     <div class="col-sm-3">  
 
-                        <p class="text-right">Name:</p>
+                        <p class="text-right">Registered:</p>
 
                     </div>
 
                     <div class="col-sm-3">
-                        <?php echo sprintf($_SESSION['FullName']); ?>
+                        <?php echo sprintf($_SESSION['Registered']); ?>
                     </div>
 
 
 
                     <div class="col-sm-3">  
+                            <p class="text-right">Hours:</p>
+                    </div>
 
-                            <p class="text-right">Banner ID:</p>
+                    <div class="col-sm-3">
+                            <?php echo sprintf($_SESSION['Hours']); ?>
+                    </div>
 
-                            </div>
+        </div> <!-- row 1 ends -->
 
-                            <div class="col-sm-3">
-                            <?php echo sprintf($_SESSION['bannerid']); ?>
-                            </div>
+        <div class="row font-weight-bold ">
+
+                    <div class="col-sm-3">  
+
+                        <p class="text-right">Bill:</p>
+
+                    </div>
+
+                    <div class="col-sm-3">
+                        <?php echo sprintf($_SESSION['Bill']); ?>
+                    </div>
+
+
+
+                    <div class="col-sm-3">  
+                            <p class="text-right">Validated:</p>
+                    </div>
+
+                    <div class="col-sm-3">
+                            <?php echo sprintf($_SESSION['Validated']); ?>
+                    </div>
 
         </div> <!-- row 2 ends -->
 
-    
+    <p>*Your bill reflects charges for the {term} only - for any past due charges please see Billings.</p>
 
 </div> <!-- Jumbotron 3 ends -->
+
+<div class="jumbotron">
+
+    <h6><u>FINANCIAL AID</u></h6>
+
+    <div class="row font-weight-bold ">
+
+                    <div class="col-sm-3">  
+
+                        <p class="text-right">FAFSA Submitted:</p>
+
+                    </div>
+
+                    <div class="col-sm-3">
+                        <?php echo sprintf($_SESSION['FafsaSub']); ?>
+                    </div>
+
+
+
+                    <div class="col-sm-3">  
+                            <p class="text-right">Selected for Verification:</p>
+                    </div>
+
+                    <div class="col-sm-3">
+                            <?php echo sprintf($_SESSION['Verification']); ?>
+                    </div>
+
+        </div> <!-- row 1 ends -->
+
+</div> <!-- Jumbotron 4 ends -->
+
+<div class="jumbotron">
+
+    <h6><u>Missing Items</u></h6>
+
+    <div class="row font-weight-bold ">
+
+                    <div class="col-sm-3">  
+
+                        <p class="text-right">Missing Items:</p>
+
+                    </div>
+
+                    <div class="col-sm-3">
+                        <?php echo sprintf($_SESSION['MissingItems']); ?>
+                    </div>
+
+              
+        </div> <!-- row 1 ends -->
+
+</div> <!-- Jumbotron 5 ends -->
+
+<div class="jumbotron">
+
+    <h6><u>Award Information for Term</u></h6>
+
+        <div class="row font-weight-bold ">
+
+                    <div class="col-sm-3">  
+
+                        <p class="text-right">Resources:</p>
+
+                    </div>
+
+                    <div class="col-sm-3">
+                        <?php echo sprintf($_SESSION['Resources']); ?>
+                    </div>
+
+              
+        </div> <!-- row 1 ends -->
+
+        <div class="row font-weight-bold ">
+
+                    <div class="col-sm-3">  
+
+                        <p class="text-right">Offered:</p>
+
+                    </div>
+
+                    <div class="col-sm-3">
+                        <?php echo sprintf($_SESSION['Offered']); ?>
+                    </div>
+
+                    <div class="col-sm-3">  
+
+                        <p class="text-right">Accepted:</p>
+
+                    </div>
+
+                    <div class="col-sm-3">
+                        <?php echo sprintf($_SESSION['Accepted']); ?>
+                    </div>
+
+                    <div class="col-sm-3">  
+
+                        <p class="text-right">Authorized:</p>
+
+                    </div>
+
+                    <div class="col-sm-3">
+                        <?php echo sprintf($_SESSION['Authorized']); ?>
+                    </div>
+
+              
+        </div> <!-- row 2 ends -->
+
+        <div class="row font-weight-bold ">
+
+                    <div class="col-sm-3">  
+
+                        <p class="text-right">Student Loans Accepted:</p>
+
+                    </div>
+
+                    <div class="col-sm-3">
+                        <?php echo sprintf($_SESSION['StudLoansAcc']); ?>
+                    </div>
+
+                    <div class="col-sm-3">  
+
+                        <p class="text-right">Parent Loans Accepted:</p>
+
+                    </div>
+
+                    <div class="col-sm-3">
+                        <?php echo sprintf($_SESSION['ParentLoansAcc']); ?>
+                    </div>
+
+                    
+              
+        </div> <!-- row 3 ends -->
+
+        <div class="row font-weight-bold ">
+
+                    <div class="col-sm-3">  
+
+                        <p class="text-right">Student Promissory Note Signed:</p>
+
+                    </div>
+
+                    <div class="col-sm-3">
+                        <?php echo sprintf($_SESSION['StudPromNote']); ?>
+                    </div>
+
+                    <div class="col-sm-3">  
+
+                        <p class="text-right">Parent Promissory Note Signed:</p>
+
+                    </div>
+
+                    <div class="col-sm-3">
+                        <?php echo sprintf($_SESSION['ParentPromNote']); ?>
+                    </div>
+
+        </div> <!-- row 4 ends -->
+        <div class="row font-weight-bold ">
+
+                <div class="col-sm-3">  
+
+                    <p class="text-right">Entrance Interview:</p>
+
+                </div>
+
+                <div class="col-sm-3">
+                    <?php echo sprintf($_SESSION['EntrnceIntrView']); ?>
+                </div>
+
+
+        </div> <!-- row 5 ends -->
+
+
+</div> <!-- Jumbotron 6 ends -->
 
 
 <div>
