@@ -99,7 +99,8 @@ require_once('studentInfo.php');
 
                             <div class="jumbotron border border-success" style="background-color:transparent !important;border-width:3px !important;margin-top:20px;padding-top:40px">
 
-<h5>Admissions and Stuent Health (Only Applicable to New Students)</h5>
+<h5>Admissions and Student Health (Only Applicable to New Students)</h5>
+<br/>
 
         <div class="row font-weight-bold ">
 
@@ -171,6 +172,7 @@ require_once('studentInfo.php');
 <div class="jumbotron border border-danger" style="background-color:transparent !important;border-width:3px !important;margin-top:20px;">
 
 <h5>Registration and Billings & Receivables</h5>
+<br/>
 
         <div class="row font-weight-bold ">
 
@@ -227,6 +229,7 @@ require_once('studentInfo.php');
 <div class="jumbotron border border-success" style="background-color:transparent !important;border-width:3px !important;margin-top:20px;">
 
     <h5>Financial Aid</h5>
+    <br/>
 
     <div class="row font-weight-bold ">
 
@@ -257,6 +260,7 @@ require_once('studentInfo.php');
 <div class="jumbotron border border-danger" style="background-color:transparent !important;border-width:3px !important;margin-top:20px;">
 
     <h5>Missing Items</h5>
+    <br/>
 
     <div class="row font-weight-bold ">
 
@@ -278,6 +282,7 @@ require_once('studentInfo.php');
 <div class="jumbotron border border-success" style="background-color:transparent !important;border-width:3px !important;margin-top:20px;">
 
     <h5>Award Information for Term</h5>
+    <br/>
 
         <div class="row font-weight-bold ">
 

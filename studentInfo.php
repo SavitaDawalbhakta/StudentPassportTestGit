@@ -24,6 +24,9 @@ header('X-Content-Type-Options: nosniff');
 
 
 //ob_start();
+
+//Verify if BannerID is present in the Banner (Ultimately in View)
+
 if(! empty($_SESSION['bannerid']) )	{
 
 
@@ -40,6 +43,16 @@ $row_StudentDetails = oci_fetch_array($query_StudentDetails, OCI_ASSOC);
 
 //oci_execute($query_StudentDetails);
 //oci_fetch_all($query_StudentDetails, $res);
+
+
+
+ if ( empty($row_StudentDetails['ID'] )){
+    header('Location: noinfo.php');
+    exit();
+}
+  
+
+
         
 $_SESSION['BANNERID'] =  isset($_SESSION['BANNERID']) ?$row_StudentDetails['ID']:"Not Found";
 $_SESSION['FirstName'] =str_replace("'", "", $row_StudentDetails['FIRST_NAME']);
@@ -94,7 +107,7 @@ $_SESSION['ParentPromNote'] = isset($_SESSION['ParentPromNote']) ? $row_StudentD
 
 $_SESSION['EntrnceIntrView'] = isset($_SESSION['EntrnceIntrView']) ? $row_StudentDetails['STUDENT_LOAN_ENTRANCE_INTERVIEW_STATUS'] : "Not Found";
 
-
+// Connecting to RMS 
 
 $sql_StudentDetailsRamdition = "SELECT * from RMSREAL.ACCT_PAYMENTRESULT INNER JOIN RMSREAL.PPLE_T_STUDENT_PROFILE
 on RMSREAL.ACCT_PAYMENTRESULT.RMSID = RMSREAL.PPLE_T_STUDENT_PROFILE.PK_RMS_ID 
@@ -164,12 +177,6 @@ if(isset($row_StudentBedSpace['CK_BED_SPACE'])){
 	$_SESSION['BedSpace'] = "NIL";
 
 }
-
-
-/* if (!empty($info_StudentDetails['ID'] )){
-    header('Location: noinfo.php');
-}
-  */
 
 //return;
 
