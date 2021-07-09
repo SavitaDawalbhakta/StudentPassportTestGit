@@ -19,7 +19,7 @@ $query_rsuser = "SELECT term FROM terms";
 $rsuser = mysqli_query($BookVoucher, $query_rsuser) or die(mysqli_error());
 $row_rsuser = mysqli_fetch_assoc($rsuser);
 $totalRows_rsuser = mysqli_num_rows($rsuser);*/
-
+/*
 $query_rsuser = "SELECT term FROM $dbName.terms";
 $rsuser = sqlsrv_query($connSQL, $query_rsuser, array(), array("Scrollable" => SQLSRV_CURSOR_KEYSET)) ;
 if( $rsuser === false) {
@@ -35,7 +35,7 @@ if($totalRows_rsuser > 0){
 	$termcode = $row_rsuser['term'];
 	//echo $termcode ."<br/>";
 }
-
+*/
 
 //$termcode = '202030';
 

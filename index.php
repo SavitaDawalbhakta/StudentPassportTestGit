@@ -84,14 +84,113 @@ if ($origin !== null && isOriginAllowed($origin, $allowOrigin)) {
 // else error messages UserFailed Authentication and redirect to index.php
 if(isset($_POST['WT_Insert'])){
 
+
+	 // Student's authentication in LDAP
+
+	 if (empty($_POST['RamID']) || empty($_POST['Password']) ) {
+		header('Location: index.php?message=UserFailedAuthentication');
+	  } 
+	  
+	  else{
+
+		$userid = $_POST['RamID'];
+		$ldappass = $_POST['Password'];
+
+		$entry = [];
+
+		define("PROFILE_IMAGE", "profile-181x186.jpg");
+		define("LDAP_ENABLED", function_exists("ldap_connect"));
+		define("APCU_ENABLED", function_exists("apcu_add"));
+		define("MAX_AGE", 600); // in seconds = 10 minutes
+
+
+
+		// Connect to LDAP
+		$ds = @ldap_connect("ldap://152.12.30.84");
+
+		if (!$ds) {
+		
+			_error("Connect failure", true);
+		
+		}else
+		{
+			echo "connected..";
+		}
+		
+		$ldaprdn = 'wssumits' . "\\". $userid;
+
+		ldap_set_option($ds, LDAP_OPT_PROTOCOL_VERSION, 3);
+		ldap_set_option($ds, LDAP_OPT_REFERRALS, 0);
+
+	// binding to ldap server
+
+	try{
+	$ldapbind = @ldap_bind($ds, $ldaprdn, $ldappass);
+
+	// verify binding
+	if ($ldapbind) {
+		echo "LDAP bind successful...";
+
+		$filter="(sAMAccountName=$userid)";
+
+		$dn = "DC=wssu,DC=edu";
+				$searchResult = ldap_search($ds, $dn, $filter);
+
+				echo "Number of entrees returned : " .ldap_count_entries($ds, $searchResult) ;
+
+				$count = ldap_count_entries($ds, $searchResult);
+				//Getting entries
+
+				$hits = @ldap_get_entries($ds, $searchResult);
+
+				$data = [];
+
+				for ($x = 0; $x < $count; $x++) {
+
+					$hit = $hits[$x];
+					//$entry = [];
+
+					$entry['bannerID'] = $hit["employeeid"][0];
+					
+				}
+
+				$_SESSION['bannerid'] = $entry['bannerID'];
+
+			 
+				header('Location: start.php');
+
+	} else {
+		echo "LDAP bind failed...";
+		header('Location: index.php?message=UserFailedAuthentication');
+	}
+
 	
-	$sql_StudentBannerAuthentication = "BEGIN WSSU.p_wssu_auth_web_user ('BANID',:userid,:password,:return_val); End;";
+
+		//echo $userid;
+		}catch (Exception $e) {
+
+			_error($e->getMessage());
+		
+		} finally {
+		
+			// Disconnect
+			@ldap_close($ds);
+		
+		}
+		
+	
+		
+	  }
+
+
+	
+	/* $sql_StudentBannerAuthentication = "BEGIN WSSU.p_wssu_auth_web_user ('BANID',:userid,:password,:return_val); End;";
 	$query_StudentBannerAuthentication = oci_parse($conn, $sql_StudentBannerAuthentication);
 	
 	OCIBindByName($query_StudentBannerAuthentication,":userid",$_POST['BannerID']);
 	OCIBindByName($query_StudentBannerAuthentication,":password",$_POST['Password']);
 	OCIBindByName($query_StudentBannerAuthentication,":return_val",$authorized,120);
-	$StudentBannerAuthentication = oci_execute($query_StudentBannerAuthentication);
+	$StudentBannerAuthentication = oci_execute($query_StudentBannerAuthentication); */
 
 
 // Granting access if authorized and setting bannerid session
@@ -99,65 +198,11 @@ if(isset($_POST['WT_Insert'])){
 //	if($authorized != "NO"){
 		//$_SESSION['bannerid'] = $_POST['BannerID'];	
 
-		$_SESSION['bannerid'] = '940240400';	
+		//$_SESSION['bannerid'] = '940242868';	
 
-					
+		
 			
-		// sql querry to get the student details
-		$sql_StudentDetails = "SELECT * FROM UNCGAWSMGR.PASSPORT_STUDENTS WHERE UNCGAWSMGR.PASSPORT_STUDENTS.ID = :BANNERID";
-		// parsing the querry with the connection string
-		$query_StudentDetails = oci_parse($conn, $sql_StudentDetails);
-		// bind the parameter BANNERID
-		OCIBindByName($query_StudentDetails,":BANNERID",$_SESSION['bannerid']);
-		// execute the query and generating result
-		$StudentDetails = oci_execute($query_StudentDetails);
-		// $row_StudentDetails contains an associative array having key value pairs
-		$row_StudentDetails = oci_fetch_array($query_StudentDetails, OCI_ASSOC);
-
-		oci_execute($query_StudentDetails);
-		oci_fetch_all($query_StudentDetails, $res);
-	
 		
-		$_SESSION['FirstName'] =str_replace("'", "", $row_StudentDetails['FIRST_NAME']);
-		$_SESSION['LastName'] = str_replace("'", "", $row_StudentDetails['LAST_NAME'] );
-		$_SESSION['FullName'] = $_SESSION['FirstName']." ".$_SESSION['LastName'];
-		$_SESSION['StudentType'] = isset($_SESSION['StudentType']) ? $row_StudentDetails['STUD_TYPE_DESC'] : "Not Found";
-		//$_SESSION['StudentType'] =str_replace("'", "", $row_StudentDetails['STUD_TYPE_DESC']);
-		$_SESSION['TransferredHrs'] = isset($_SESSION['TransferredHrs']) ? $row_StudentDetails['TRANSF_HRS'] : "Not Found";
-
-		$_SESSION['Residency'] = isset($_SESSION['Residency']) ? $row_StudentDetails['RESD_DESC'] : "Not Found";
-		$_SESSION['FinalHST'] = isset($_SESSION['FinalHST']) ? $row_StudentDetails['FHST_RECV'] : "Not Found";
-		$_SESSION['Ramidition'] = isset($_SESSION['Ramidition']) ? $row_StudentDetails['Ramidition'] : "Not Found";
-		$_SESSION['Immunization'] = isset($_SESSION['Immunization']) ? $row_StudentDetails['IMMU_STAT'] : "Not Found";
-		$_SESSION['BedSpace'] = isset($_SESSION['BedSpace']) ? $row_StudentDetails['BedSpace'] : "Not Found";
-		$_SESSION['HousingExempt'] = isset($_SESSION['HousingExempt']) ? $row_StudentDetails['HousingExempt'] : "Not Found";
-
-		$_SESSION['Registered'] = isset($_SESSION['Registered']) ? $row_StudentDetails['REG_IND'] : "Not Found";
-		$_SESSION['Hours'] = isset($_SESSION['Hours']) ? $row_StudentDetails['REG_HRS'] : "Not Found";
-		$_SESSION['Bill'] = isset($_SESSION['Bill']) ? $row_StudentDetails['BALANCE'] : "Not Found";
-		$_SESSION['Validated'] = isset($_SESSION['Validated']) ? $row_StudentDetails['VALIDATED'] : "Not Found";
-	
-		$_SESSION['FafsaSub'] = isset($_SESSION['FafsaSub']) ? $row_StudentDetails['FAFSA_RECVD'] : "Not Found";
-		$_SESSION['Verification'] = isset($_SESSION['Verification']) ? $row_StudentDetails['VERIFICATION_STATUS'] : "Not Found";
-	
-		$_SESSION['MissingItems'] = isset($_SESSION['MissingItems']) ? $row_StudentDetails['MISSING_REQUIREMENT'] : "Not Found";
-	
-		$_SESSION['Resources'] = isset($_SESSION['Resources']) ? $row_StudentDetails['RESOURCES'] : "Not Found";
-		$_SESSION['Offered'] = isset($_SESSION['Offered']) ? $row_StudentDetails['TERM_OFFER_AMT'] : "Not Found";
-		$_SESSION['Accepted'] = isset($_SESSION['Accepted']) ? $row_StudentDetails['TERM_ACCEPT_AMT'] : "Not Found";
-		$_SESSION['Authorized'] = isset($_SESSION['Authorized']) ? $row_StudentDetails['TERM_MEMO_AUTH'] : "Not Found";
-	
-		$_SESSION['StudLoansAcc'] = isset($_SESSION['StudLoansAcc']) ? $row_StudentDetails['STUDENT_LOANS_ACCEPTED'] : "Not Found";
-		$_SESSION['ParentLoansAcc'] = isset($_SESSION['ParentLoansAcc']) ? $row_StudentDetails['PARENT_LOANS_ACCEPTED'] : "Not Found";
-	
-		$_SESSION['StudPromNote'] = isset($_SESSION['StudPromNote']) ? $row_StudentDetails['STUDENT_PROMISSORY_NOTE_SIGNED'] : "Not Found";
-		$_SESSION['ParentPromNote'] = isset($_SESSION['ParentPromNote']) ? $row_StudentDetails['PARENT_PROMISSORY_NOTE_SIGNED'] : "Not Found";
-	
-		$_SESSION['EntrnceIntrView'] = isset($_SESSION['EntrnceIntrView']) ? $row_StudentDetails['STUDENT_LOAN_ENTRANCE_INTERVIEW_STATUS'] : "Not Found";
-	
-		
-		//return;
-		header('Location: studentinfo.php');
 		
 //	} else {
 	//	header('Location: index.php?message=UserFailedAuthentication');
@@ -173,7 +218,7 @@ if(isset($_POST['WT_Insert'])){
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-		<title>WSSU: Book Voucher</title>
+		<title>Student Passport</title>
 		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
 				integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
 		<link href="css/themes.css" rel="stylesheet" type="text/css" />
@@ -192,34 +237,33 @@ if(isset($_POST['WT_Insert'])){
                         border="0" /></a>
 		</div> <!-- col-4 end -->
 		<div class="col-8" style="padding-top:20px;padding-right:40px;padding-left:40px;">	
-		<h4>General Information</h4>
-               
+		<h4>Student Passport - One-Stop Service Center Personalized Information </h4>
+        
                 <!--<?php echo $_SESSION['myMessage']; ?>-->
-                <p class="lead">One Stop Information.</p>
+                
                <div class="jumbotron">
 			   		<form id="form1" class="form-group" name="form1" method="post" action="index.php" AUTOCOMPLETE="OFF">
 					   <?php echo Csrf::getInputToken('index') ?>
 					   <div class="form-group row">
-                            <label for="BannerID" class="col-sm-2 col-form-label font-weight-bold">Banner ID:</label>
+                            <label for="RamID" class="col-sm-2 col-form-label font-weight-bold">Ram ID:</label>
                             <div class="col-sm-10">
-                                <input name="BannerID" class="form-control" type="text" id="BannerID" maxlength="9"
-                                    placeholder="Please Enter your BannerID" />
+                                <input name="RamID" class="form-control" type="text" id="RamID" 
+                                    placeholder="Please Enter your RamID" />
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label for="Password" class="col-sm-2 col-form-label font-weight-bold">PIN #:</label>
+                            <label for="Password" class="col-sm-2 col-form-label font-weight-bold">Password:</label>
                             <div class="col-sm-10">
-                                <input name="Password" class="form-control" type="password" id="Password" maxlength="6"
-                                    placeholder="Please Enter your PIN #" />
+                                <input name="Password" class="form-control" type="password" id="Password"
+                                    placeholder="Please Enter your Password" />
                             </div>
                         </div>
-
-						<?php 
-	if (isset($_GET['message']) && strip_tags($_GET['message']) == "UserFailedAuthentication") { ?>
+                        <?php 
+						if (isset($_GET['message']) && strip_tags($_GET['message']) == "UserFailedAuthentication") { ?>
 					   <div class="row">
                             <div class="col-sm-2"></div>
                             <div class="col-sm-10 text-danger font-weight-bold text-justify">
-                                Your Banner ID and Password combination is wrong! Please try again.
+                                Your Ram ID and Password combination is wrong! Please try again.
                             </div>
                         </div>
                         <?php } ?>
@@ -228,11 +272,12 @@ if(isset($_POST['WT_Insert'])){
                         <div class="row">
                             <div class="col-sm-2"></div>
                             <div class="col-sm-10 text-danger font-weight-bold text-justify">
-                                You have successfully logged out of the parking voucher application.Please close this
+                                You have successfully logged out of the book voucher application.Please close this
                                 browser window to ensure your data's safety.
                             </div>
                         </div>
                         <?php } ?>
+                        
                         <br />
 
 						<div class="col-sm-12">

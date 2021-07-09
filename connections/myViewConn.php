@@ -1,3 +1,4 @@
+
 <?php
 
 // Connects to the PROD8 (i.e. database)
@@ -14,45 +15,9 @@ if (!$conn) {
 else
 {
     echo "success";
-   // $sql_StudentDetails = "SELECT * FROM TVRAUTH fetch first 5 rows only";
-
-   //$sql_StudentDetails = "SELECT * FROM BANINST1.AT_AR_BALANCE_BY_ENTITY fetch first 5 rows only";
-
-
-   //$sql_StudentDetails = "SELECT * FROM tbraccd fetch first 5 rows only";
-
-   //$sql_StudentDetails = "SELECT * FROM TAISMGR.TVRAUTH fetch first 5 rows only";
-
-   //$sql_StudentDetails = "SELECT * FROM wssu.wssu_validation fetch first 5 rows only";
-
-   //$sql_StudentDetails = "SELECT * FROM GENERAL.GOREMAL A fetch first 5 rows only";
    
-  // $sql_StudentDetails = "SELECT * FROM BANINST1.AT_AR_BALANCE_BY_ENTITY  where pidm_key between 274000 and 275000 order by 1 fetch first 100 rows only "; //WHERE BANINST1.AT_AR_BALANCE_BY_ENTITY.ID = '940274184' ";
-/*
-   $sql_StudentDetails = $sql_StudentAvailableBalance = "SELECT WSSU.bzgkccrd.f_get_min_payment('274553', '202120') AS BALANCE FROM DUAL 
-   
-   union all
-   SELECT WSSU.bzgkccrd.f_get_min_payment('274554', '202120') AS BALANCE FROM DUAL
-
-   union all
-   SELECT WSSU.bzgkccrd.f_get_min_payment('1762333', '202120') AS BALANCE FROM DUAL
-   
-   union all
-   SELECT WSSU.bzgkccrd.f_get_min_payment('274735', '202120') AS BALANCE FROM DUAL
-   
-   union all
-   SELECT WSSU.bzgkccrd.f_get_min_payment('50735', '202120') AS BALANCE FROM DUAL
-   
-   union all
-   SELECT WSSU.bzgkccrd.f_get_min_payment('50736', '202120') AS BALANCE FROM DUAL
-   
-   
-   
-   ";
-   
-*/
-
-   $sql_StudentDetails = "select * from UNCGAWSMGR.PASSPORT_STUDENTS fetch first 5 rows only";
+    
+  // $sql_StudentDetails = "select * from UNCGAWSMGR.PASSPORT_STUDENTS fetch first 5 rows only";
 
   /*  $sql_StudentDetails = "select * from UNCGAWSMGR.PASSPORT_STUDENTS 
   where ID in('940240400', '940231247', '940242868','940265741','940257670') "; */
@@ -62,13 +27,11 @@ else
   //$sql_StudentDetails = "select count(*) from UNCGAWSMGR.PASSPORT_STUDENTS";
 
   //$sql_StudentDetails = "select STUDENT_LOAN_ENTRANCE_INTERVIEW_STATUS from UNCGAWSMGR.PASSPORT_STUDENTS where ID = '940240400'";
+// This is jtest120 BannerID = 940282957; No data found
+  $sql_StudentDetails = "select * from UNCGAWSMGR.PASSPORT_STUDENTS where ID = '940282957'";
 
 
-    //$sql_StudentDetails = "SELECT * FROM tbraccd fetch first 5 rows only";
-
-
-  // $sql_StudentDetails = "select tbraccd_detail_code, tbraccd_term_code, tbraccd_pidm, to_char(nvl(sum(tbraccd_amount), 0),'999999.99') AS DEDUCT from tbraccd group by tbraccd_detail_code, tbraccd_term_code, tbraccd_pidm";
-
+  
 
   //  $sql_StudentDetails = "SELECT TABLE_NAME FROM all_tables ";
     
